@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {EmployeeService} from '../../services/employee.service';
 import {Employee} from '../../../Employee';
+import {UserService} from '../../services/user.service';
 
 @Component({
   moduleId: module.id,
@@ -13,13 +14,16 @@ export class EmployeesComponent {
     firstName: string;
     lastName: string;
     companyID: string;
-    constructor(private employeeService:EmployeeService){
-        this.employeeService.getEmployees(989)
+    constructor(private employeeService:EmployeeService, public userService:UserService ){
+        console.log(this.userService.company_id);
+        this.employeeService.getEmployees(this.userService.company_id)
             .subscribe(employees => {
                 this.employees = employees;
             });
     }
-model = {
+    
+model = {   
+            _id:"",
             firstName: "",
             lastName: "",
             companyID: ""
@@ -28,12 +32,12 @@ submitted = false;
 onSubmit() {
     this.submitted = true; 
 }
-
     addEmployee(){
         var newEmployee = {
             firstName: this.model.firstName,
             lastName: this.model.lastName,
-            companyID: this.model.companyID
+            companyID: this.userService.company_id
+            
         }
         this.employeeService.addEmployee(newEmployee)
             .subscribe(employee => {

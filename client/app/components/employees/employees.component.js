@@ -10,17 +10,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var employee_service_1 = require("../../services/employee.service");
+var user_service_1 = require("../../services/user.service");
 var EmployeesComponent = (function () {
-    function EmployeesComponent(employeeService) {
+    function EmployeesComponent(employeeService, userService) {
         var _this = this;
         this.employeeService = employeeService;
+        this.userService = userService;
         this.model = {
+            _id: "",
             firstName: "",
             lastName: "",
             companyID: ""
         };
         this.submitted = false;
-        this.employeeService.getEmployees(989)
+        console.log(this.userService.company_id);
+        this.employeeService.getEmployees(this.userService.company_id)
             .subscribe(function (employees) {
             _this.employees = employees;
         });
@@ -33,7 +37,7 @@ var EmployeesComponent = (function () {
         var newEmployee = {
             firstName: this.model.firstName,
             lastName: this.model.lastName,
-            companyID: this.model.companyID
+            companyID: this.userService.company_id
         };
         this.employeeService.addEmployee(newEmployee)
             .subscribe(function (employee) {
@@ -72,7 +76,7 @@ EmployeesComponent = __decorate([
         selector: 'employees',
         templateUrl: 'employees.component.html'
     }),
-    __metadata("design:paramtypes", [employee_service_1.EmployeeService])
+    __metadata("design:paramtypes", [employee_service_1.EmployeeService, user_service_1.UserService])
 ], EmployeesComponent);
 exports.EmployeesComponent = EmployeesComponent;
 //# sourceMappingURL=employees.component.js.map

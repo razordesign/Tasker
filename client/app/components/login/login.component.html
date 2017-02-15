@@ -1,0 +1,14 @@
+<form class="well">
+  <table class="example-full-width" cellspacing="0"><tr>
+    <td><md-input-container class="example-full-width">
+      <input md-input placeholder="Login" #username>
+    </md-input-container></td>
+    <td><md-input-container class="example-full-width">
+      <input md-input placeholder="Password" #password>
+    </md-input-container></td>
+  </tr></table>
+ <button md-raised-button >LOGIN</button>
+</form>
+
+<button (click)="logme(username.value, password.value)"  *ngIf="!authService.isLoggedIn">Login</button>
+<button (click)="logout()" *ngIf="authService.isLoggedIn">Logout</button>

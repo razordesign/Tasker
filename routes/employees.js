@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
-mongoose.Promise = global.Promise; 
-mongoose.connect('mongodb://test:test@ds111589.mlab.com:11589/todosrazor');
+var mongoose = require('./conn');
+
 //schema
 var employeeSchema = new mongoose.Schema({
 firstName: String,
@@ -10,10 +9,16 @@ lastName: String,
 companyID: String
 });
 var Employee = mongoose.model('employees', employeeSchema);
-
-
 // Get All Employees
-router.get('/employees', function(req, res, next){
+function requireLogin (req, res, next) {
+  if (!req.user) {
+    res.redirect('/somehow');
+  } else {
+    next();
+  }
+};
+
+router.get('/employees', requireLogin, function(req, res){
     Employee.find({}, function(err, employees){
         if(err){
             res.send(err);
@@ -22,7 +27,7 @@ router.get('/employees', function(req, res, next){
     });
 });
 
-router.get('/employees/:companyID', function(req, res, next){
+router.get('/employees/:companyID', requireLogin, function(req, res){
     Employee.find({companyID: req.params.companyID}, function(err, employees){
         if(err){
             res.send(err);
@@ -32,7 +37,7 @@ router.get('/employees/:companyID', function(req, res, next){
 });
 
 // Get Single Employee
-router.get('/employee/:id', function(req, res, next){
+router.get('/employee/:id', requireLogin, function(req, res){
     Employee.findOne({_id: req.params.id}, function(err, employee){
         if(err){
             res.send(err);
@@ -42,7 +47,7 @@ router.get('/employee/:id', function(req, res, next){
 });
 
 //Save Employee
-router.post('/employee', function(req, res, next){
+router.post('/employee', function(req, res){
     var employee = req.body;
     if(!employee.firstName || !employee.lastName || !employee.companyID){
         res.status(400);

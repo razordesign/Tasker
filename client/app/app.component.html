@@ -1,5 +1,10 @@
 <div class="container">
-    <h1>Employees</h1>
-    <hr>
-    <employees></employees>
+    <h1>Tasker</h1>
+     <md-card>
+      <button md-raised-button color="primary" routerLink="/employees" routerLinkActive="active">EMPLOYEES</button>
+      <button md-raised-button color="primary" routerLink="/services" routerLinkActive="active">SERVICES</button>
+      <button md-raised-button color="primary" routerLink="/" routerLinkActive="active">LOGIN</button>
+      <a md-raised-button color="primary" href="/logout">LOGOUT</a>
+    </md-card>
+    <router-outlet></router-outlet>
 </div>

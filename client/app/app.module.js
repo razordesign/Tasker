@@ -9,8 +9,12 @@ var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
 var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
+var app_routing_module_1 = require("./app-routing.module");
 var app_component_1 = require("./app.component");
 var employees_component_1 = require("./components/employees/employees.component");
+var login_component_1 = require("./components/login/login.component");
+var material_1 = require("@angular/material");
+var auth_guard_1 = require("./shared/security/auth.guard");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -18,8 +22,15 @@ var AppModule = (function () {
 }());
 AppModule = __decorate([
     core_1.NgModule({
-        imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule],
-        declarations: [app_component_1.AppComponent, employees_component_1.EmployeesComponent],
+        imports: [
+            [material_1.MaterialModule.forRoot()],
+            platform_browser_1.BrowserModule,
+            http_1.HttpModule,
+            forms_1.FormsModule,
+            app_routing_module_1.AppRoutingModule
+        ],
+        declarations: [app_component_1.AppComponent, employees_component_1.EmployeesComponent, login_component_1.LoginComponent],
+        providers: [auth_guard_1.AuthGuard],
         bootstrap: [app_component_1.AppComponent]
     })
 ], AppModule);
