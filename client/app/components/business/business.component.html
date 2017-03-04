@@ -1,5 +1,5 @@
 <md-sidenav-container>
-    <md-sidenav class="side" opened="true">
+    <md-sidenav class="side" mode="side" opened="true">
         <nav>
             <h3>Business Area</h3>
             <ul>
@@ -19,13 +19,16 @@
 
 
     </md-sidenav>
-    PARIMARY
+    <router-outlet></router-outlet>
     <!-- primary content -->
 </md-sidenav-container>
 
 <style>
     .active{
-        background:black;
+          font-weight: 600;
+    }
+    active{
+          font-weight: 600;
     }
     h3 {
         border: none;

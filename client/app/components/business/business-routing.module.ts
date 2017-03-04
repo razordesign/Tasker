@@ -4,9 +4,16 @@ import { EmployeesComponent }    from './employees/employees.component';
 import { ServicesComponent }  from './services/services.component';
 import { BusinessComponent } from './business.component';
 const businessRoutes: Routes = [
-  { path: 'business', component: BusinessComponent},
-  { path: 'business/employees',  component: EmployeesComponent },
-  { path: 'business/services', component: ServicesComponent }
+  { path: 'business',
+    component: BusinessComponent,
+    children: [
+      {
+         path: 'employees',  component: EmployeesComponent
+      },
+      {
+        path: 'services', component: ServicesComponent
+      }
+    ]}
 ];
 @NgModule({
   imports: [
