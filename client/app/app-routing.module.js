@@ -7,7 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
-var employees_component_1 = require("./components/employees/employees.component");
+//import { EmployeesComponent } from './components/employees/employees.component';
+//import { ServicesComponent } from './components/services/services.component';
 var login_component_1 = require("./components/login/login.component");
 var auth_guard_1 = require("./shared/security/auth.guard");
 var auth_service_1 = require("./shared/security/auth.service");
@@ -16,8 +17,8 @@ var fallbackRoute = {
     component: login_component_1.LoginComponent
 };
 var appRoutes = [
-    { path: 'employees', component: employees_component_1.EmployeesComponent, canActivate: [auth_guard_1.AuthGuard] },
     { path: '', component: login_component_1.LoginComponent },
+    // { path: 'employees', component: EmployeesComponent, canActivate: [AuthGuard] },
     fallbackRoute
 ];
 var AppRoutingModule = (function () {

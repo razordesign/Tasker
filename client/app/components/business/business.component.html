@@ -1,0 +1,82 @@
+<md-sidenav-container>
+    <md-sidenav class="side" opened="true">
+        <nav>
+            <h3>Business Area</h3>
+            <ul>
+                <!--template bindings={}-->
+                <li>
+                    <a routerLinkActive="active" routerLink="/business/employees">
+            EMPLOYEES
+          </a>
+                </li>
+                <li>
+                    <a routerLinkActive="active" routerLink="/business/services">
+            SERVICES
+          </a>
+                </li>
+            </ul>
+        </nav>
+
+
+    </md-sidenav>
+    PARIMARY
+    <!-- primary content -->
+</md-sidenav-container>
+
+<style>
+    .active{
+        background:black;
+    }
+    h3 {
+        border: none;
+        font-size: 10px;
+        letter-spacing: 1px;
+        line-height: 24px;
+        text-transform: uppercase;
+        font-weight: 400;
+        margin: 0;
+        padding: 0 16px;
+        background: rgba(0, 0, 0, .32);
+        color: #fff;
+    }
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+    li {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-color: rgba(0, 0, 0, .06);
+        color: rgba(0, 0, 0, .54);
+        margin: 0;
+        padding: 0;
+        display: list-item;
+        text-align: -webkit-match-parent;
+        list-style-type: none;
+    }
+    li>a {
+        box-sizing: border-box;
+        display: block;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 47px;
+        text-decoration: none;
+        -webkit-transition: all .3s;
+        transition: all .3s;
+        padding: 0 16px;
+        position: relative;
+    }
+    li>a:hover {
+        background: #fafafa;
+        color: #00bcd4;
+    }
+    .side{
+    padding-bottom: 72px;
+    width: 240px;
+    bottom: 0;
+    overflow: auto;
+    height: 100%;
+    }
+</style>

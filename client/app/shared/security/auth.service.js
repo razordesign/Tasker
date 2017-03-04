@@ -25,20 +25,19 @@ var AuthService = (function () {
             "login": username,
             "password": password
         };
-        console.log(User);
-        //Test Content
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         return this.http.post('/users/login', JSON.stringify(User), { headers: headers })
             .map(function (res) {
             if (res) {
                 if (res.status === 201) {
-                    _this.redirectUrl = res.headers._headers.get("location")[0];
-                    _this.company_id = res.headers._headers.get("uid")[0];
-                    console.log(_this.company_id);
+                    _this.redirectUrl = "/employees";
+                    _this.email = res.headers._headers.get("email")[0];
+                    _this.isLoggedIn = true;
                     return [{ status: res.status, json: res }];
                 }
                 else if (res.status === 200) {
+                    _this.isLoggedIn = false;
                     return [{ status: res.status, json: res }];
                 }
             }
@@ -57,11 +56,35 @@ var AuthService = (function () {
                 return Observable_1.Observable.throw(new Error(error.status));
             }
         });
-        //Test Content
-        //return Observable.of(true).delay(1000).do(val => this.isLoggedIn = true);
     };
     AuthService.prototype.logout = function () {
-        this.isLoggedIn = false;
+        var _this = this;
+        this.http.get('/users/logout/')
+            .map(function (res) {
+            if (res) {
+                if (res.status === 201) {
+                    console.log(res.headers._headers.get("success")[0]);
+                    _this.isLoggedIn = false;
+                }
+                else {
+                    console.log(res.headers._headers.get("error")[0]);
+                    _this.isLoggedIn = false;
+                }
+            }
+        }).subscribe(function (res) { return _this.responser = res; });
+        this.redirectUrl = "/";
+    };
+    AuthService.prototype.checklogin = function () {
+        var _this = this;
+        this.http.get('/users/checkstatus/')
+            .map(function (res) {
+            if (res) {
+                if (res.status === 201) {
+                    _this.email = res.headers._headers.get("email")[0];
+                    _this.isLoggedIn = true;
+                }
+            }
+        }).subscribe(function (res) { return _this.responser = res; });
     };
     return AuthService;
 }());

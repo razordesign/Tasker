@@ -1,0 +1,115 @@
+<form class="well" (ngSubmit)="addService()" #serviceform="ngForm">
+  <table class="example-full-width" cellspacing="0">
+    <tr>
+      <td>
+        <md-input-container floatPlaceholder="always" class="example-full-width">
+          <input mdInput placeholder="Service Name" [(ngModel)]="model.serviceName" name="serviceName" #serviceName="ngModel">
+        </md-input-container>
+      </td>
+      <td>
+        <md-input-container floatPlaceholder="always" class="example-full-width">
+          <input mdInput type="number" min="0" placeholder="Service Duration" [(ngModel)]="model.serviceDuration" name="serviceDuration"
+            #serviceDuration="ngModel">
+        </md-input-container>
+      </td>
+    </tr>
+  </table>
+  <button md-raised-button type="submit">ADD</button>
+</form>
+
+
+<md-card>
+  <md-list>
+    <h3 md-subheader>Active Services</h3>
+    <md-list-item *ngFor="let service of services" [class.selected]="service === selectedService">
+      <h4> {{service.serviceName}} {{service.serviceDuration}} <button md-mini-fab (click)="onSelect(service)"><md-icon>build</md-icon></button>        <button md-mini-fab (click)="deleteService(service._id)"><md-icon>delete</md-icon></button> </h4>
+    </md-list-item>
+  </md-list>
+</md-card>
+
+<md-grid-list cols="4">
+  <md-grid-tile>
+    <form *ngIf="selectedService" (ngSubmit)="updateService(selectedService)" #editServiceForm="ngForm">
+      <md-card class="example-card">
+        <md-card-header>
+          <div md-card-avatar class="example-header-image"></div>
+          <md-card-title style="font-size:14pt">Service details:</md-card-title>
+          <md-card-subtitle>You can update data below</md-card-subtitle>
+        </md-card-header>
+        <md-card-content>
+          <div *ngIf="selectedService">
+            <div>
+              <md-input-container floatPlaceholder="always"> <input mdInput placeholder="Service Name" [(ngModel)]="selectedService.serviceName" name="serviceName"></md-input-container>
+              <md-input-container floatPlaceholder="always">
+                <input mdInput type="number" min="0" placeholder="Service Duration" [(ngModel)]="selectedService.serviceDuration" name="serviceDuration"></md-input-container>
+            </div>
+          </div>
+        </md-card-content>
+        <md-card-actions>
+          <button md-raised-button type="button" (click)="hideEdit()">Cancel</button>
+          <button md-raised-button type="submit">Save</button>
+        </md-card-actions>
+      </md-card>
+    </form>
+  </md-grid-tile>
+  <md-grid-tile>
+
+    <md-card *ngIf="selectedService" class="example-card">
+      <md-card-header>
+        <div md-card-avatar class="example-header-image"></div>
+        <md-card-title style="font-size:14pt">Assigned employees:</md-card-title>
+        <md-card-subtitle>You can update data below</md-card-subtitle>
+      </md-card-header>
+      <md-card-content>
+
+        <md-list>
+          <md-list-item *ngFor="let assignee of assignees">
+            <span class="lefter"> {{assignee.firstName}} {{assignee.lastName}}</span>
+            <button md-raised-button class="righter" (click)="unassign(selectedService._id, assignee._id)">
+              Unassign<md-icon>close</md-icon></button>
+          </md-list-item>
+          <md-list-item>
+            <button *ngIf="addingOff" md-raised-button (click)="addShow(selectedService._id)"><md-icon>add</md-icon>Assign new person</button>
+            <div *ngIf="addShower">
+              <md-select placeholder="Employee" [(ngModel)]="selectedEmployee">
+                <md-option *ngFor="let employee of employees" [value]="employee._id">{{ employee.firstName }} {{employee.lastName}}</md-option>
+              </md-select>
+              <button md-raised-button (click)="assignEmployee(selectedService._id, selectedEmployee)">Add</button>
+            </div>
+          </md-list-item>
+        </md-list>
+      </md-card-content>
+      <md-card-actions>
+        
+      </md-card-actions>
+    </md-card>
+
+
+
+
+  </md-grid-tile>
+  <md-grid-tile>3</md-grid-tile>
+  <md-grid-tile>4</md-grid-tile>
+</md-grid-list>
+
+
+
+
+
+<style>
+  .selected {
+    background-color: RGBA(255, 100, 100, 0.1);
+  }
+  
+  .lefter {
+    margin-right: 1rem;
+  }
+  
+  .example-icon {
+    padding: 0 14px;
+  }
+  
+  .example-spacer {
+    flex: 1 1 auto;
+  }
+</style>

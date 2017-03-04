@@ -27,7 +27,7 @@ var AuthGuard = (function () {
         // Store the attempted URL for redirecting
         this.authService.redirectUrl = url;
         // Navigate to the login page with extras
-        this.router.navigate(['/login']);
+        this.router.navigate(['/']);
         return false;
     };
     return AuthGuard;

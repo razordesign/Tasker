@@ -11,8 +11,10 @@ var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
 var app_routing_module_1 = require("./app-routing.module");
 var app_component_1 = require("./app.component");
-var employees_component_1 = require("./components/employees/employees.component");
 var login_component_1 = require("./components/login/login.component");
+var business_module_1 = require("./components/business/business.module");
+//import { EmployeesComponent, ConfirmDialogComponent } from './components/employees/employees.component';
+//import { ServicesComponent, ConfirmServiceComponent } from './components/services/services.component';
 var material_1 = require("@angular/material");
 var auth_guard_1 = require("./shared/security/auth.guard");
 var AppModule = (function () {
@@ -22,14 +24,18 @@ var AppModule = (function () {
 }());
 AppModule = __decorate([
     core_1.NgModule({
+        // entryComponents: [ ConfirmDialogComponent, ConfirmServiceComponent ],
         imports: [
-            [material_1.MaterialModule.forRoot()],
+            [material_1.MaterialModule],
+            material_1.MdDialogModule,
             platform_browser_1.BrowserModule,
             http_1.HttpModule,
             forms_1.FormsModule,
+            business_module_1.BusinessModule,
             app_routing_module_1.AppRoutingModule
         ],
-        declarations: [app_component_1.AppComponent, employees_component_1.EmployeesComponent, login_component_1.LoginComponent],
+        declarations: [app_component_1.AppComponent, login_component_1.LoginComponent
+        ],
         providers: [auth_guard_1.AuthGuard],
         bootstrap: [app_component_1.AppComponent]
     })

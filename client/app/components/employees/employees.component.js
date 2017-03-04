@@ -9,63 +9,85 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
 var employee_service_1 = require("../../services/employee.service");
-var user_service_1 = require("../../services/user.service");
+var material_1 = require("@angular/material");
 var EmployeesComponent = (function () {
-    function EmployeesComponent(employeeService, userService) {
-        var _this = this;
+    function EmployeesComponent(dialog, notificationBar, router, employeeService) {
+        this.dialog = dialog;
+        this.notificationBar = notificationBar;
+        this.router = router;
         this.employeeService = employeeService;
-        this.userService = userService;
         this.model = {
-            _id: "",
             firstName: "",
-            lastName: "",
-            companyID: ""
+            lastName: ""
         };
-        this.submitted = false;
-        console.log(this.userService.company_id);
-        this.employeeService.getEmployees(this.userService.company_id)
-            .subscribe(function (employees) {
-            _this.employees = employees;
-        });
     }
-    EmployeesComponent.prototype.onSubmit = function () {
-        this.submitted = true;
+    EmployeesComponent.prototype.getEmployees = function () {
+        var _this = this;
+        this.employeeService.getEmployees()
+            .then(function (employees) { return _this.employees = employees; }, function (error) { return _this.errorMessage = error; });
+    };
+    EmployeesComponent.prototype.ngOnInit = function () {
+        this.getEmployees();
+    };
+    EmployeesComponent.prototype.onSelect = function (employee) {
+        this.selectedEmployee = employee;
     };
     EmployeesComponent.prototype.addEmployee = function () {
         var _this = this;
         var newEmployee = {
             firstName: this.model.firstName,
-            lastName: this.model.lastName,
-            companyID: this.userService.company_id
+            lastName: this.model.lastName
         };
         this.employeeService.addEmployee(newEmployee)
             .subscribe(function (employee) {
             _this.employees.push(employee);
-            _this.firstName = '';
-            _this.lastName = '';
+            _this.model.firstName = '';
+            _this.model.lastName = '';
+        });
+    };
+    EmployeesComponent.prototype.updateEmployee = function (employee) {
+        var _this = this;
+        console.log(employee);
+        this.employeeService.updateEmployee(employee).subscribe(function (res) {
+            _this.response = res;
+            console.log(_this.response);
+            _this.notificationOpen("Employee updated successfuly", "");
+            _this.hideEdit();
         });
     };
     EmployeesComponent.prototype.deleteEmployee = function (id) {
-        var employees = this.employees;
-        this.employeeService.deleteEmployee(id).subscribe(function (data) {
-            if (data.n == 1) {
-                for (var i = 0; i < employees.length; i++) {
-                    if (employees[i]._id == id) {
-                        employees.splice(i, 1);
+        var _this = this;
+        //Dialog Function
+        var dialogRef = this.dialog.open(ConfirmDialogComponent, {
+            height: '175px',
+            width: '500px',
+        });
+        dialogRef.afterClosed().subscribe(function (result) {
+            _this.selectedOption = result;
+            if (_this.selectedOption === "yes") {
+                var employees = _this.employees;
+                _this.employeeService.deleteEmployee(id).subscribe(function (data) {
+                    if (data.n == 1) {
+                        for (var i = 0; i < employees.length; i++) {
+                            if (employees[i]._id == id) {
+                                employees.splice(i, 1);
+                            }
+                        }
                     }
-                }
+                });
             }
         });
     };
-    EmployeesComponent.prototype.updateStatus = function (employee) {
-        var _employee = {
-            _id: employee._id,
-            title: employee.title,
-            isDone: !employee.isDone
-        };
-        this.employeeService.updateStatus(_employee).subscribe(function (data) {
-            employee.isDone = !employee.isDone;
+    EmployeesComponent.prototype.hideEdit = function () {
+        this.selectedEmployee = undefined;
+    };
+    //Extra features
+    //Notifications Function   
+    EmployeesComponent.prototype.notificationOpen = function (message, action) {
+        this.notificationBar.open(message, action, {
+            duration: 2000,
         });
     };
     return EmployeesComponent;
@@ -74,9 +96,27 @@ EmployeesComponent = __decorate([
     core_1.Component({
         moduleId: module.id,
         selector: 'employees',
-        templateUrl: 'employees.component.html'
+        templateUrl: 'employees.component.html',
+        providers: [material_1.MaterialModule]
     }),
-    __metadata("design:paramtypes", [employee_service_1.EmployeeService, user_service_1.UserService])
+    __metadata("design:paramtypes", [material_1.MdDialog, material_1.MdSnackBar, router_1.Router, employee_service_1.EmployeeService])
 ], EmployeesComponent);
 exports.EmployeesComponent = EmployeesComponent;
+var ConfirmDialogComponent = (function () {
+    function ConfirmDialogComponent(dialogRef) {
+        this.dialogRef = dialogRef;
+    }
+    ConfirmDialogComponent.prototype.ngOnInit = function () { };
+    return ConfirmDialogComponent;
+}());
+ConfirmDialogComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'app-confirm-dialog',
+        templateUrl: 'confirmationDialog.html',
+        providers: [material_1.MaterialModule]
+    }),
+    __metadata("design:paramtypes", [material_1.MdDialogRef])
+], ConfirmDialogComponent);
+exports.ConfirmDialogComponent = ConfirmDialogComponent;
 //# sourceMappingURL=employees.component.js.map

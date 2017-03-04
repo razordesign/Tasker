@@ -11,8 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
 var auth_service_1 = require("../../shared/security/auth.service");
+var material_1 = require("@angular/material");
 var LoginComponent = (function () {
-    function LoginComponent(authService, router) {
+    function LoginComponent(notificationBar, authService, router) {
+        this.notificationBar = notificationBar;
         this.authService = authService;
         this.router = router;
         this.setMessage();
@@ -32,11 +34,15 @@ var LoginComponent = (function () {
                 // Redirect the user
                 _this.router.navigate([redirect]);
             }
+            else {
+                _this.notificationOpen("Username/password combination not found", "");
+            }
         });
     };
-    LoginComponent.prototype.logout = function () {
-        this.authService.logout();
-        this.setMessage();
+    LoginComponent.prototype.notificationOpen = function (message, action) {
+        this.notificationBar.open(message, action, {
+            duration: 2000,
+        });
     };
     return LoginComponent;
 }());
@@ -46,7 +52,7 @@ LoginComponent = __decorate([
         selector: 'login',
         templateUrl: 'login.component.html'
     }),
-    __metadata("design:paramtypes", [auth_service_1.AuthService, router_1.Router])
+    __metadata("design:paramtypes", [material_1.MdSnackBar, auth_service_1.AuthService, router_1.Router])
 ], LoginComponent);
 exports.LoginComponent = LoginComponent;
 //# sourceMappingURL=login.component.js.map

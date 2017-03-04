@@ -1,10 +1,10 @@
-<div class="container">
-    <h1>Tasker</h1>
-     <md-card>
-      <button md-raised-button color="primary" routerLink="/employees" routerLinkActive="active">EMPLOYEES</button>
-      <button md-raised-button color="primary" routerLink="/services" routerLinkActive="active">SERVICES</button>
-      <button md-raised-button color="primary" routerLink="/" routerLinkActive="active">LOGIN</button>
-      <a md-raised-button color="primary" href="/logout">LOGOUT</a>
-    </md-card>
+<md-toolbar *ngIf="authService.isLoggedIn">
+    <div style="margin:0 5px;">LOGO</div>
+    <button md-button color="primary">CALENDAR</button>
+    <button md-button color="primary">CUSTOMERS</button>
+    <button md-button color="primary" routerLink="/business" routerLinkActive="active">BUSINESS</button>
+    <button md-button color="primary" routerLink="/" routerLinkActive="active" *ngIf="!authService.isLoggedIn">LOGIN</button>
+    <a md-button color="primary" (click)="logout()" *ngIf="authService.isLoggedIn">LOGOUT</a>
+    <p style="margin-left:1rem; font-size:12pt;" *ngIf="authService.isLoggedIn"> You are logged in as: {{authService.email}}</p>
+</md-toolbar>
     <router-outlet></router-outlet>
-</div>

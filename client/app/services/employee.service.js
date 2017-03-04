@@ -10,18 +10,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+require("rxjs/add/operator/toPromise");
 require("rxjs/add/operator/map");
 var EmployeeService = (function () {
     function EmployeeService(http) {
         this.http = http;
-        console.log('Employee Service Initialized...');
+        this.employeeUrl = '/api/employee';
     }
-    EmployeeService.prototype.getEmployees = function (companyID) {
-        return this.http.get('/api/employees/' + companyID)
-            .map(function (res) { return res.json(); });
+    EmployeeService.prototype.getEmployees = function () {
+        return this.http.get('/api/employees')
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
+    };
+    EmployeeService.prototype.extractData = function (res) {
+        var body = res.json();
+        return body || {};
+    };
+    EmployeeService.prototype.handleError = function (error) {
+        // In a real world app, we might use a remote logging infrastructure
+        var errMsg;
+        if (error instanceof http_1.Response) {
+            var body = error.json() || '';
+            var err = body.error || JSON.stringify(body);
+            errMsg = error.status + " - " + (error.statusText || '') + " " + err;
+        }
+        else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Promise.reject(errMsg);
+    };
+    EmployeeService.prototype.getEmployee = function (id) {
+        var url = this.employeeUrl + "/" + id;
+        return this.http.get(url)
+            .toPromise()
+            .then(this.extractData)
+            .catch(this.handleError);
     };
     EmployeeService.prototype.addEmployee = function (newEmployee) {
-        console.log(newEmployee);
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         return this.http.post('/api/employee', JSON.stringify(newEmployee), { headers: headers })
@@ -31,10 +58,11 @@ var EmployeeService = (function () {
         return this.http.delete('/api/employee/' + id)
             .map(function (res) { return res.json(); });
     };
-    EmployeeService.prototype.updateStatus = function (employee) {
+    EmployeeService.prototype.updateEmployee = function (employee) {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
-        return this.http.put('/api/employee/' + employee._id, JSON.stringify(employee), { headers: headers })
+        console.log(employee._id);
+        return this.http.put('/api/employee/', JSON.stringify(employee), { headers: headers })
             .map(function (res) { return res.json(); });
     };
     return EmployeeService;
